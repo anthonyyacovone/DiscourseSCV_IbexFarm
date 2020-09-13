@@ -1,0 +1,201 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story = " After Mr. Hornswoggle returned to_the_library,_the_Gumshoe_Gang huddled close. &rarr; ]_Alex frowned_and_pushed_on_his_glasses. &rarr; ]_\"Who would know enough about turtles to know that Coco might be worth some money\? Or that he is a she\? Or even that she's pregnant\?\" &rarr; ]_We all looked at each other for a long minute. &rarr; ]_Then I said what everybody was thinking. &rarr; ]_\"Javier.\" &rarr; ]_We had to wait until first recess to talk to Javier again. &rarr; ]_We found_Javier_on_the_swings. &rarr; ]_\"Hey guys,\" he said, but he didn't look that happy to see us. &rarr; ]_Alex and Caleb sat in the swings on either side of him. &rarr; ]_\"Can you help us out with our case\?\" Alex asked. &rarr; ]_\"Um, okay,\" Javier said. &rarr; ]_\"How long can turtles live\?\" &rarr; ]_\"Like 30 years sometimes.\" &rarr; ]_\"Cool. So, it would be neat for your pet shop to have a_rare_turtle_for_sale,_right\?\" &rarr; ]_Javier cleared his throat. &rarr; ]_He glanced at me and then looked down at his hands. &rarr; ]_\"I guess so. But it's my parent's store, not mine. We have a lot of other animals too, like lizards and gerbils and kittens and stuff.\" &rarr; ]_\"What would you do with a million bucks\?\" Rocket asked. &rarr; ]_Javier blinked. \"I don't know. Buy a zoo, maybe\? Why\?\" &rarr; ]_\"Just wondering,\" I said. &rarr; ]_I wrote down my notes so far. Suspect: Javier. Motive: profit from sale of Coco and her adorable baby turtles. Evidence: weird, nervous behavior, possibly because of guilty conscience. &rarr; ]_\"Could you tell us everything you_did_yesterday_from_before_lunch until you left extended day\?\" I asked. &rarr; ]_Javier's face crumpled. &rarr; ]_\"You think I took Coco\?\" &rarr; ]_I felt a prick of sympathy. But detectives must be tough to get the truth. \"We_need_the_facts.\" &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+
+

@@ -1,0 +1,200 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story = " We need to tell Mr. Hornswoggle,\" Alex said, putting down his marker. &rarr; ]_\"He won't_be_back_at_school_until tomorrow. &rarr; ]_I was hoping we could figure out something today.\" &rarr; ]_\"What if he climbed out of his cage\?\" Alex asked. &rarr; ]_Javier shook his head. &rarr; ]_\"Turtles can't climb. &rarr; ]_Especially aquatic turtles.\" I_stared_at_Javier. &rarr; ]_\"Hey, you know a bunch about animals, right\?\" Javier shrugged. &rarr; ]_\"Some, I guess. &rarr; ]_My parents own the pet shop Claws and Paws_down_at_the_Centerville_mall.\" \"That's right! Then you can help us.\" I whipped out my notebook. &rarr; ]_\"What do you mean by aquatic turtle\?\" \"Aquatic turtles need to be in_water_most_of_the_time, that's why their feet are webbed. &rarr; ]_Land turtles like to swim sometimes, but they spend_a_lot_of_time,_well, on land.\" \"What_kind_of_aquatic_turtle is Coco\?\" &rarr; ]_Javier shrugged again. \"I don't know. Some kind of map turtle.The pattern of white, black, and green lines and circles all over his carapace look like a map, but there_are_lots_of_different_kinds of map turtles. And we don't have any as pretty_as_him_at_the_pet store.\" &rarr; ]_I wrinkled my nose._\"What's_a_carapace\?\" &rarr; ]_\"His shell.\" &rarr; ]_Just then Megan pranced over, waving her hands_and_blowing_on_her_fingernails. &rarr; ]_\"What's all_the_excitement_over_here\?\" &rarr; ]_Alex was about to tell her, but I narrowed my eyes at him. &rarr; ]_I had just noticed something about Megan's black V-neck sweater. &rarr; ]_I reached over_and_plucked_off_a_short white hair. &rarr; ]_\"Eww! What is that\?\" Megan squealed. &rarr; ]_I held it between_my_fingertips_with_one_hand and picked up one of the white hairs stuck to the knees of my own pants. &rarr; ]_I put them side by side. &rarr; ]_\"Voila! A match!\" &rarr; ]_Megan made a face like she'd just had a bite of a sour lemon. &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+

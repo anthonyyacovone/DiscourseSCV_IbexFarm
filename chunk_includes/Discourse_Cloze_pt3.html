@@ -1,0 +1,201 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story = " Just then our teacher, Miss Flores, clapped her hands. &rarr; ]_\"Back to your seats, class! It's time for language arts.\" &rarr; ]_Miss Flores had curly black hair, and her name meant flower in Spanish. &rarr; ]_Miss Flores pointed to the whiteboard, which had a bunch of sentences on it. &rarr; ]_\"This morning, we_are_going_to_talk_about good punctuation. &rarr; ]_Caleb poked my arm. &rarr; ]_\"That means not being late.\" &rarr; ]_\"No,\" Lyra whispered. &rarr; ]_\"That's punctual. Punctuation is periods and commas and stuff.\" &rarr; ]_Caleb made a face. &rarr; ]_\"I knew that. I was just testing you.\" &rarr; ]_\"We are going to read each sentence together, and then you can help me figure out what important_parts_of_the_sentence_are missing, okay\?\" &rarr; ]_\"Look at this sentence: My cat is so lazy I have to hire_other_cats_to_take_naps for her.\" &rarr; ]_Everybody howled with laughter. &rarr; ]_Rocket fell right out of his seat. &rarr; ]_\"Can we write_one_for_a_parakeet\?\"_Carys asked. &rarr; ]_\"And my box turtle!\" Emily_said,_bouncing_in_her_chair. &rarr; ]_\"Like, 'My turtle is so slow he walks backwards'!\" &rarr; ]_Miss_Flores_held_up_her_hands. &rarr; ]_\"Emily, that was fantastic. Yes, let's write one for each of our pets. But first,_we_need_to_do_the assignment. Deal\?\" &rarr; ]_\"Deal!\" everybody yelled. &rarr; ]_On Wednesday morning, I dug through my whole entire closet searching for the right outfit to wear. &rarr; ]_\"Oh, dear!\" Mom said as_she_tried_to_come_into my room. &rarr; ]_She_peeked_around_the_clothes_mountain._\"What_on_Earth_is going on in here\?\" &rarr; ]_\"Just getting dressed!\" I climbed over my clothes, slid down the other side to the floor, and showed Mom my plain white T-shirt and brown corduroy pants. &rarr; ]_I gave Mom a hug as she handed me my lunch_box_and_a_breakfast_bar. &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+
+

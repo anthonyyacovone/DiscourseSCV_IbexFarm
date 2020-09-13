@@ -1,0 +1,218 @@
+
+<style media="screen" type="text/css"> 
+div { 
+   width: 50em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: -1em;
+   }
+   
+h1 {
+   margin-top:1em;
+   margin-bottom:.3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: large;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+<html>
+  
+<div id="WelcomeScreen" name="WelcomeScreen" style="margin: 0 auto; text-align: justify; border:1px solid white; background-color:black"; width:50%>
+<center>
+  <h1> Welcome! </h1>
+  <i> Thank you for participating in this study! </i>
+</center>
+<br>
+<hr><br>
+In this study, you will be reading a children's story. Most of the time, you will be reading sentences; however, you will periodically be asked to complete sentences by guessing words <b>one at a time</b>. You will be guessing 
+~600 words throughout the experiment. Please make your window full-screen for the best presentation.<br><br>
+  
+When reading, you will push the right arrow key &rarr; when you see it at the end of the sentence. If there is no &rarr; you must guess what you think the next word will be. Most of the time, you will be guessing more than one
+word per sentence. In some sentence, the guessing might be really challenging; however, this may get easier as the story unfolds!<br> <br>
+
+<br> 
+Try a few examples below!<br><br>
+  
+<hr>
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo" style="font-size: x-large"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+<hr>
+  
+<br>
+<b>Please try to correctly guess as many words as you can!</b> We will ask some comprehension questions throughout the story, so make sure to pay attention! <br> 
+<br>
+You will be asked to read the entire story and guess about 550 words. The study typically takes an hour. Also, you may find yourself making a lot of wrong guesses. 
+Most people only get 40 words correct! Once you are done, you will receive an <u>experiment completion code</u> to submit to SONA via the original Qualtrics survey.<br>
+<br>
+<hr>
+
+<script>
+  
+
+
+var Story = " This is an example sentence. Press the right arrow key whenever you finish reading it. &rarr; ]_If there is no arrow at the end, you must guess the next word in_the_sentence. &rarr; ]_You will see_more_practice_sentences before you start the study. &rarr; ]_Thanks for practicing! &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = Date.now() - start;
+    start = Date.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ";";
+    
+    
+}
+</script>
+  
+</center>
+</body>
+</html>
+

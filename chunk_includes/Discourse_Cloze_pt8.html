@@ -1,0 +1,201 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story =  " I leaped to my feet. &rarr; ]_\"You're a genius! Whoever took that bite of cheese is missing a front tooth!\" &rarr; ]_\"Megan and Emily are both missing teeth,\" Alex said, frowning. &rarr; ]_\"But that doesn't make sense, because Megan has been cleared, and Emily already has a turtle. Why would she steal one\?\" &rarr; ]_I sank back down. &rarr; ]_\"I have no idea.\" &rarr; ]_\"We could still talk to Emily,\" Caleb said, patting my shoulder. &rarr; ]_\"Let's rattle her feathers!\" &rarr; ]_After language arts, lunch, and music, we finally had library time. &rarr; ]_Rain_splashed_the_window_panes, but the library was warm and bright and smelled wonderful, like dusty old books. &rarr; ]_The rest of the class had spread out among the rows of_bookshelves,_searching_for_books_to check out. &rarr; ]_\"This might be a good time to find Emily,\" Alex said quietly. &rarr; ]_We checked each row until we saw her. &rarr; ]_She was looking down at a book in her hand, standing in front of the same animals section I had searched through on Wednesday. &rarr; ]_\"Emily,\" I whispered. &rarr; ]_She_snapped_the_book_shut and held it behind her back. &rarr; ]_\"Hey, guys.\" &rarr; ]_\"Can we talk to you\?\" Alex asked. &rarr; ]_Emily looked around, \"Um, sure.\" &rarr; ]_\"We're looking for the turtle snatcher,\" I said, explaining about the cheese we_found_at_the_crime_scene. &rarr; ]_\"Whoever bit the cheese is missing a tooth, and so are you.\" &rarr; ]_\"That could_be_lots_of_people.\" &rarr; ]_\"Not as many as you might expect,\" Alex said. &rarr; ]_\"It's important we find Coco,\" I said. &rarr; ]_\"She's pregnant and needs a_safe_place_to_lay_her eggs.\" &rarr; ]_Emily's_face_went_a_little_white. &rarr; ]_\"Really\?\" she squeaked. &rarr; ]_\"I thought Coco was a boy.\" &rarr; ]_\"Surprise!\" Caleb said. &rarr; ]_\"Well, I don't think I can help you.\" &rarr; ]_I was getting one of those funny detective feelings in my belly. &rarr; ]_\"Emily, maybe you can help us. &rarr; ]_Can we see the book you were looking at\?\" Emily hesitated, biting her lower lip. &rarr; ]_\"Okay. It's just, you know, a turtle book, because I have a turtle already. As a pet, at home.\" &rarr; ]_She handed me_the_book:_The_Care_and Feeding of Aquatic Turtles. &rarr; ]_I_stared_at_the_cover. &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+
+

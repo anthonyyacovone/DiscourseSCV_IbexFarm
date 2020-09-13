@@ -1,0 +1,25 @@
+.error-text {
+    color: red;
+    font-weight: bold;
+}
+
+p {
+  text-align: justify;
+}
+
+body {
+    color: black;
+    font-family: Verdana, Geneva, sans-serif;
+    margin-left: 10em;
+    margin-top: 12em;
+    margin-right: 10em;
+}
+
+Message-continue-link:visited { 
+  color: white; 
+  }
+
+Message-continue-link { 
+  color: white; 
+  margin-left: 30em;
+  }

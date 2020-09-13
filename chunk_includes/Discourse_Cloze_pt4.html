@@ -1,0 +1,201 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story = " At school, Mrs. Holmes was_standing_at_the_front_door greeting students as they came in. &rarr; ]_On Wednesday mornings and Friday afternoons, we went upstairs to the library. &rarr; ]_The library was a huge room with thousands of books stacked on rows of shelves that went all the way_up_to_the_ceiling. &rarr; ]_The librarian, Mr. Hornswoggle, had to use a stepladder_to_reach_the_highest_books. &rarr; ]_Mr. Hornswoggle really loved books. &rarr; ]_He also loved animals. &rarr; ]_Even though the library was technically not a classroom, he had more class pets than any of the other teachers. &rarr; ]_As soon as we got to the library, we all ran over to say hello. &rarr; ]_The pets were lined up in glass_cages_beneath_the_windows. &rarr; ]_There was a black rat snake named Zake, a white fluffy hamster named_Howard,_and_a_gigantic_tarantula called Fluffy. &rarr; ]_Let me tell you, even though he was hairy, that spider was definitely not fluffy. &rarr; ]_There also was Coco the turtle. &rarr; ]_Sometimes when he opened his mouth, he looked like he was grinning at you. &rarr; ]_Mr._Hornswoggle_rang_a_little_bell on his desk. &rarr; ]_That meant it_was_time_to_pick_out our books for the week and check them out. &rarr; ]_I'd put a pet as my number one on the birthday wish list I gave to Mom, but I wasn't sure whether to ask for a parrot or a St. Bernard dog or a python or a ferret, so I used the Dewey Decimal System to find the animal section to do some research. &rarr; ]_Mr. Hornswoggle found me as I was flipping through a book of exotic pets like monkeys and jungle cats. &rarr; ]_He coughed and patted around his vest pockets for his glasses. &rarr; ]_Only problem was they were on his face already. &rarr; ]_I pointed to my eyes and cleared my throat. &rarr; ]_\"Eh. Of course. Thank you, dear. Oh, I did wish to speak with you. I am leaving_after_lunch_for_a_meeting, and I won't be back until tomorrow. I usually take care of the animals myself on Wednesdays, but I was hoping you might_be_able_to_fill_in for me today, maybe after school\?\" &rarr; ]_My heart did a little leap. &rarr; ]_\"Of course, Mr. Hornswoggle! I'll just phone my mother from the office. I'm sure she won't mind.\" &rarr; ]_She_didn't,_of_course. Mom is great like that. &rarr; ]_After school, I hugged all of my friends goodbye, slung my backpack over my shoulder, and made my way to the library. &rarr; ]_Right away I_noticed_Howard_the_hamster's_lid was ajar. &rarr; ]_Howard_was_running_in_his_metal wheel. &rarr; ]_He gave me a look, twitched his nose, and kept right on running. &rarr; ]_I fixed his lid, then I got the plastic container full of crickets to feed to Fluffy. &rarr; ]_And that's when I realized that the aquarium's lid was ajar too. &rarr; ]_Coco always spent his time swimming around his aquarium or_laying_on_a_rock_under his UV sun lamp, which Mr. Hornswoggle called 'basking'. &rarr; ]_Only I searched his whole enclosure, and he wasn't basking or blending in anywhere. &rarr; ]_Coco was gone. &rarr; ]_My heart was_beating_like_a_million_pounding horses were stuck inside me. &rarr; ]_Where_in_the_world_was Coco\? Could he have_climbed_out_of_his_glass cage\? I got down on the floor and crawled around,_checking_under_the_tables_and the bookcases. &rarr; ]_All I got were little white hairs stuck all over the knees of my pants. &rarr; ]_Someone must have stolen Coco! But why\? First things first, I told myself. &rarr; ]_A good detective knows that details are the key to solving a case. &rarr; ]_If Coco was stolen, then the library_was_definitely_a_crime_scene. &rarr; ]_I quickly pulled my notebook out of my backpack. I_was_in_charge_of writing down all the notes for our cases, which was usually stuff like suspects, dues, motives, and alibis. &rarr; ]_I examined the scene. &rarr; ]_I wrote down that both Howard and Coco's lids had been removed. &rarr; ]_I walked_all_along_the_row_of cages, looking for something out of place. &rarr; ]_Aha! At the end of the table next to Zake's_cage_was_a_paper_towel. Sitting_on_top_of_the_paper towel was a large hunk of cheddar cheese with a single bite taken out. &rarr; ]_A bite so perfect I could see all the teeth marks. &rarr; ]_I carefully lifted the hunk of cheese and placed it in a plastic baggie. &rarr; ]_I always kept at least a dozen plastic baggies in my backpack. &rarr; ]_A Gumshoe never knew when she might land a new case. &rarr; ]_And from_the_looks_of_things,_this was gonna be a big one. &rarr; ]_I finished giving food_and_water_to_Howard_and Zake, then I glanced at the clock. &rarr; ]_Alex would be in extended day right now. &rarr; ]_I still had 20 minutes to go see him and tell him about Coco! Extended day was held in the gym after school. &rarr; ]_Alex_was_at_the_crafts_table, drawing some kind of weird science experiment with Javier. &rarr; ]_I_slipped_into_the_seat opposite Alex. &rarr; ]_\"Coco's gone.\" Alex_looked_up_and_squinted at me. &rarr; ]_\"What are you doing here\?\" &rarr; ]_\"Never mind that. Coco's been turtle-napped.\" &rarr;  ]_\"What\? The turtle's taking a nap\?\" &rarr; ]_\"No! Like kidnapped! Coco's gone!\" &rarr; ]_Javier gasped. \"That's terrible!\" &rarr; ]_\"I know.\" I quickly explained what I'd found. &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+
+

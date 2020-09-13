@@ -1,0 +1,201 @@
+<style media="screen" type="text/css"> 
+div { 
+   width: 60em; 
+   font-size:large; 
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-bottom: 1em;
+   margin-top: 3em;
+   }
+   
+h3 {
+   font-size: large; 
+   margin-top:1em;
+   margin-bottom: 3em;
+   text-align: center;
+   }
+   
+p { 
+   font-size: 25;
+   text-align: justify;  
+   }
+  
+body {
+    color: white;
+    background-color: black;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-top: 3em;
+    font-size: 15pt;
+}
+
+   
+</style>
+
+
+<html>
+<body>
+  
+<div style="margin: 0 auto; text-align: left; border:1px solid white; background-color:black">
+
+<form id="inputarea" onSubmit="return false;">
+  <h2>Reading and guessing game:</h2><br>
+  <p id="demo"></p>
+  <br>
+  <input  id="guess" type="text" name="guess" value="" autocomplete="off" spellcheck="value" onkeydown="validateGuess(event)">
+  <br>
+  <p id="CountLine">Number of correct guesses: 0</p>
+  <br>
+  
+  <form id="ClozeData">
+    <input id="username" type="hidden" name="username" value="">
+    <input id="userdate" type="hidden" name="userdate" value="">
+    <input id="datatosend" type="hidden" name="datatosend">
+  </form>
+  
+</form> 
+  
+</div>
+
+<script>
+  
+
+
+var Story = " Javier shook his head. &rarr; ]_\"I went to the same classes as you did. You can ask Miss Flores. I never asked for a hall pass. After school, I walked to_extended_day_with_Alex. I was_with_him_the_whole_time.\" &rarr; ]_Alex nodded. \"That is true.\" &rarr; ]_\"We'll check_your_alibi_with_Miss_Flores.\" &rarr; ]_\"So, can I go now\?\" &rarr; ]_Javier folded and unfolded his hands in his lap. &rarr; ]_He_kicked_at_the_dirt beneath his swing. &rarr; ]_I narrowed my eyes at him. &rarr; ]_\"If you didn't do it, then how come you're acting so strange\?\" &rarr; ]_Javier took a deep breath, and then he said all in a rush, \"I'm not supposed to tell that Tully's mother came into Claws and Paws to_buy_Tully_a_pet_for her birthday. And I'm not supposed to tell that I helped her and_it\'s_going_to_be_a\-\" &rarr; ]_\"Whoa!\" Lyra_held_up_her_hands. &rarr; ]_\"Don't tell her!\" Alex warned. &rarr; ]_Lyra pulled me away from Javier. &rarr; ]_\"Thank you for your help!\" she called over her shoulder. &rarr; ]_She whispered to me, \"New rule: No talking to Javier until your birthday party, got it\?\" &rarr; ]_I had to promise and pinky swear three times before Lyra let me go. &rarr; ]_Then Miss Flores blew her whistle, so we headed back toward the school. &rarr; ]_\"What now\?\" Caleb asked. &rarr; ]_\"I feel like we're grasping at the straw that broke the camel's back!\" &rarr; ]_\"Me too,\" Alex said. &rarr; ]_\"Is there anyone else who_would_want_a_turtle,_like for a pet\?\" Caleb asked. &rarr; ]_Alex wrinkled his nose, which made his glasses almost slide off. &rarr; ]_\"Well, Emily already has a turtle, and so does Xavier. Abby has a bunny. Carys has that yellow talking parakeet she brought for show and tell last year. I think everybody else has regular pets, like cats and dogs and Guinea pigs.\" &rarr; ]_\"People have pigs for pets\?\" Rocket asked incredulously. &rarr; ]_Alex laughed. \"Well, I think that's possible. But Guinea pigs are little furry rodents. Kind of like hamsters.\" &rarr; ]_Thinking of hamsters made me think of fluffy Howard with his cute pink nose. &rarr; ]_Which made me think of the library, and Coco's empty aquarium. &rarr; ]_And then I smacked my own forehead. &rarr; ]_\"Guys! We've been missing a_critical_piece_of_evidence!\" &rarr; ]_I'd almost completely forgotten about the block of cheese with the bite marks in it, which had probably been left by the turtle snatcher. &rarr; ]_And maybe we could use it to catch him! &rarr; ]_When I woke up on Friday morning, it was pouring rain outside. &rarr; ]_The sky was so dark, I almost crawled back beneath my blankets. &rarr; ]_But I had too much to do today, including solving the turtle snatcher case and bringing Coco home safely. &rarr; ]_When the bus dropped me off at school, I pulled my raincoat's hood over my head and_dashed_through_the_rain. &rarr; ]_Mr. Sleuth held the front door open for me. &rarr; ]_Caleb was standing in the lobby, shaking out his wet hair. &rarr; ]_\"Come on,\" I grabbed his hand. \"We have work to do.\" &rarr; ]_But I didn't get a chance to bring out the cheese evidence until first recess. &rarr; ]_The rain was still_pounding_against_the_roof,_so we went to the gym. Miss Flores started dodgeball, which is usually one of my favorite games. &rarr; ]_Part of being a detective was knowing when you had to be responsible and work. &rarr; ]_Coco was counting on us. &rarr; ]_The Gumshoe Gang sat in a_circle_on_the_stage,_hidden behind the blue stage curtain. &rarr; ]_We passed around the hunk of cheese, examining the bite marks with my magnifying glass. &rarr; ]_\"This is definitely the size of a kid's mouth,\" Alex said. &rarr; ]_\"Look_at_these_marks,\" Lyra said, examining the evidence with the magnifying glass. &rarr; ]_\"You can see the marks of the top and bottom teeth biting all the way through the cheese, except for right_there,_in_the_front.\" &rarr; ]_To continue, press 'Esc'. &rarr;"
+    
+var StorySplit = Story.match( /[^\]]+/g );
+
+var SentenceNumber = [];
+  
+for (i = 0; i < StorySplit.length; i++) { 
+    SentenceNumber[i] = i+1;
+}
+  
+var x=0;
+
+var str = StorySplit[x];
+
+var words = str.split("_");
+  
+var fullsent = words[0];
+
+var i = 0;
+var corCount = 0;
+var guessWord = "";
+var correctWord = "";
+var acc = 0;
+
+document.getElementById("demo").innerHTML = fullsent;
+
+if(fullsent==""){
+var filler = "."
+filler = filler.fontcolor("black");
+document.getElementById("demo").innerHTML = filler;
+}
+
+document.getElementById("guess").focus();
+
+</script>
+
+</body>
+</html>
+
+<script>
+
+var start = Date.now()
+var end = 0
+var RT = 0
+var sent = SentenceNumber[x];
+  
+ 
+function validateGuess(e){ 
+    
+ const regex = RegExp('&rarr;');
+ var arrow_check = regex.test(fullsent); 
+  
+ var keycode = (e.keycode ? e.keyCode : e.which); 
+  
+  if (regex.test(fullsent)) {
+  
+    if (keycode == "39") {
+      
+      handleEnter(event);
+      
+    } else if (keycode == "13") { 
+      
+      alert("You are reading right now, no need to guess!");
+      document.getElementById("guess").value = "";
+
+            
+    }
+    
+  } else if (keycode == "39") {
+    
+    alert("You must make a guess here!"); 
+    
+  } else if (keycode == "13") { 
+      
+      var x = document.getElementById("guess").value
+   
+      if (x == "" | x == " " | x == "  " | x == "   ") { 
+       
+       alert("You must make an actual guess!"); 
+       document.getElementById("guess").value = "";
+
+       
+      } else { 
+       
+      handleEnter(event); } 
+  }
+}
+  
+  
+function handleEnter(e){
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    
+    i=i+1;
+    RT = performance.now() - start;
+    start = performance.now();
+
+    if (i == words.length) {
+    x++;
+
+    str = StorySplit[x];
+    words = str.split("_");
+    i=1;
+    fullsent = "";
+    sent = SentenceNumber[x];
+    }
+
+
+    correctWord = words[i].toLowerCase();
+    guessWord = (document.getElementById("guess").value).toLowerCase();
+  
+    correctWord = correctWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    guessWord = guessWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+
+    correctWord = correctWord.trim();  
+    guessWord = guessWord.trim();
+
+    if (correctWord === guessWord) {
+          corCount = corCount + 1;
+      acc = 1;
+    } else {
+          acc = 0;
+    }  
+
+    document.getElementById("demo").innerHTML = fullsent + " " + words[i];
+    document.getElementById("guess").value = "";
+    document.getElementById("CountLine").innerHTML = "Number of correct guesses: " + corCount;
+
+    document.getElementById("guess").focus();
+
+    fullsent = fullsent + " " + words[i]
+    
+    document.getElementById("datatosend").value = document.getElementById("datatosend").value+sent+","+correctWord+","+guessWord+","+acc+","+RT+ ",";
+    
+    
+}
+</script>
+
+
